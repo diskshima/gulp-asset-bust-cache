@@ -1,3 +1,4 @@
 {
+  "name": "gulp-bust-cache",
   "packageManager": "yarn@3.1.0"
 }
