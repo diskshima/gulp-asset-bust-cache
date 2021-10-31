@@ -9,8 +9,8 @@ describe('gulp-bust-cache', function () {
     const expectedFile = new File({
       cwd: 'test/',
       base: 'test/data/',
-      path: 'test/data/after.html',
-      contents: fs.readFileSync('test/data/after.html'),
+      path: 'test/data/expected.html',
+      contents: fs.readFileSync('test/data/expected.html'),
     });
 
     it('should add hashes to assets', function (done) {
