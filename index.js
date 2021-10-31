@@ -2,11 +2,13 @@ const fs = require("fs");
 const path = require("path");
 
 const PluginError = require("plugin-error");
-const map = require("map-stream");
+const through = require("through2");
 const cheerio = require("cheerio");
 const MD5 = require("md5");
 
 const { src, dest } = require("gulp");
+
+const PLUGIN_NAME = "bust-cache";
 
 const loadAttribute = function (content) {
   const contentName = content.name.toLowerCase();
@@ -51,42 +53,37 @@ const bust = function(fileContents, options) {
   return fileContents;
 };
 
-export const bustCache = function (options) {
+const bustCache = function (options) {
   if (!options) {
     options = {};
   }
 
-  return map(function (file, cb) {
-    if (file.isNull()) {
-      return cb(null, file);
-    }
-
+  const stream = through.obj(function(file, enc, cb) {
     if (file.isStream()) {
-      return cb(new PluginError("bust-cache", "Streaming not supported"));
+      this.emit('error', new PluginError(PLUGIN_NAME, 'Streams are not supported!'));
+      return cb();
     }
 
-    if (!options.basePath) {
-      options.basePath = path.dirname(path.resolve(file.path))+"/";
-    }
-
-    if (options.showLog) {
-      console.log("Processing: ", file.path);
-    }
-
-    fs.readFile(file.path, { encoding: "UTF-8" }, function (err, data) {
-      if (err) {
-        return cb(new PluginError("bust-cache", err));
+    if (file.isBuffer()) {
+      if (!options.basePath) {
+        options.basePath = path.dirname(path.resolve(file.path)) + "/";
       }
-
-      const processedContents = bust(data, options);
 
       if (options.showLog) {
-        console.log("Cache busted:", file.relative);
+        console.log("Processing: ", file.path);
       }
 
-      file.contents = new Buffer(processedContents);
+      const processedContents = bust(file.contents.toString(enc), options);
 
-      cb(null, file);
-    });
+      file.contents = new Buffer(processedContents);
+    }
+
+    this.push(file);
+
+    cb();
   });
+
+  return stream;
 };
+
+exports.bustCache = bustCache;
