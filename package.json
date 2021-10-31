@@ -1,5 +1,8 @@
 {
   "name": "gulp-bust-cache",
+  "homepage": "https://github.com/diskshima/gulp-bust-cache",
+  "author": "Daisuke Shimamoto <diskshima@gmail.com>",
+  "version": "1.0.0",
   "packageManager": "yarn@3.1.0",
   "devDependencies": {
     "cheerio": "^1.0.0-rc.10",
@@ -16,5 +19,6 @@
   "scripts": {
     "lint": "eslint **/*.js",
     "test": "mocha"
-  }
+  },
+  "license" : "MIT"
 }
