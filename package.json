@@ -11,5 +11,8 @@
     "through2": "^4.0.2",
     "vinyl": "^2.2.1"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "scripts": {
+    "test": "mocha"
+  }
 }
