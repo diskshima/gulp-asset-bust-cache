@@ -75,7 +75,7 @@ const bustCache = function (options) {
 
       const processedContents = bust(file.contents.toString(enc), options);
 
-      file.contents = new Buffer(processedContents);
+      file.contents = Buffer.from(processedContents);
     }
 
     this.push(file);
