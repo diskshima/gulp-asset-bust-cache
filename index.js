@@ -1,12 +1,11 @@
 const fs = require("fs");
 const path = require("path");
+const { Buffer } = require("buffer");
 
 const PluginError = require("plugin-error");
 const through = require("through2");
 const cheerio = require("cheerio");
 const MD5 = require("md5");
-
-const { src, dest } = require("gulp");
 
 const PLUGIN_NAME = "bust-cache";
 
@@ -58,7 +57,7 @@ const bustCache = function (options) {
     options = {};
   }
 
-  const stream = through.obj(function(file, enc, cb) {
+  const stream = through.obj(function (file, enc, cb) {
     if (file.isStream()) {
       this.emit('error', new PluginError(PLUGIN_NAME, 'Streams are not supported!'));
       return cb();

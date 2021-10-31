@@ -1,2 +1,4 @@
 function a() {
 }
+
+a();

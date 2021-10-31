@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const should = require('should');
 const File = require('vinyl');
 const { bustCache } = require('../index');
@@ -32,7 +31,7 @@ describe('gulp-bust-cache', function () {
         String(newFileContent).should.equal(String(expectedFile.contents));
         done();
       });
-      stream.on('error', function(err) {
+      stream.on('error', function (err) {
         should.exist(err);
         done(err);
       });
@@ -40,8 +39,5 @@ describe('gulp-bust-cache', function () {
       stream.write(beforeFile);
       stream.end();
     });
-
   });
 });
-
-
