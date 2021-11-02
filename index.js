@@ -25,10 +25,29 @@ const loadAttribute = function (content) {
   throw "No matching attribute for this tag: " + contentName;
 };
 
-const addMD5 = function (content, origValue, options) {
+const setAttibute = function (elm, newValue) {
+  const contentName = elm.name.toLowerCase();
+
+  switch (contentName) {
+  case "link":
+    elm.attribs.href = newValue;
+  case "script":
+  case "img":
+    elm.attribs.src = newValue;
+  case "source":
+    elm.attribs.srcset = newValue;
+  }
+};
+
+const addMD5Param = function (origValue, options) {
   const valNoHash = origValue.split("?")[0];
   const hash = MD5(fs.readFileSync(options.basePath + valNoHash).toString());
-  return content.replace(origValue, valNoHash + "?v=" + hash);
+  return valNoHash + "?v=" + hash;
+}
+
+const addMD5 = function (content, origValue, options) {
+  const newValue = addMD5Param(origValue, options);
+  return content.replace(origValue, newValue);
 };
 
 const bust = function(fileContents, options) {
@@ -42,14 +61,16 @@ const bust = function(fileContents, options) {
   const elements = dom("script[src], link[rel=stylesheet][href], link[rel=import][href], link[rel=preload][href], source, img");
 
   for (var i = 0, len = elements.length; i < len; i++) {
-    const origValue = loadAttribute(elements[i]);
+    const elm = elements[i];
+    const origValue = loadAttribute(elm);
 
     if (!hasProtocol.test(origValue)) {
-      fileContents = addMD5(fileContents, origValue, options);
+      const newValue = addMD5Param(origValue, options);
+      setAttibute(elm, newValue);
     }
   }
 
-  return fileContents;
+  return dom.html();
 };
 
 const bustCache = function (options) {
