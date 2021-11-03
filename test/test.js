@@ -18,31 +18,34 @@ function genFile(fullpath) {
   });
 }
 
+function cachesShouldbeBusted(done, beforeFile, expectedFile) {
+  let newFileContent = null;
+
+  const stream = bustCache();
+
+  stream.on('data', function (newFile) {
+    newFileContent = newFile.contents;
+  });
+  stream.on('end', function () {
+    const diffText = diffHTMLs(String(expectedFile.contents), String(newFileContent));
+    done(diffText);
+  });
+  stream.on('error', function (err) {
+    should.exist(err);
+    done(err);
+  });
+
+  stream.write(beforeFile);
+  stream.end();
+}
+
 describe('gulp-bust-cache', function () {
   describe('in buffer mode', function () {
     const expectedFile = genFile('test/data/expected.html');
 
     it('should add hashes to assets', function (done) {
       const beforeFile = genFile('test/data/before.html');
-
-      let newFileContent = null;
-
-      const stream = bustCache();
-
-      stream.on('data', function (newFile) {
-        newFileContent = newFile.contents;
-      });
-      stream.on('end', function () {
-        const diffText = diffHTMLs(String(expectedFile.contents), String(newFileContent));
-        done(diffText);
-      });
-      stream.on('error', function (err) {
-        should.exist(err);
-        done(err);
-      });
-
-      stream.write(beforeFile);
-      stream.end();
+      cachesShouldbeBusted(done, beforeFile, expectedFile);
     });
   });
 
@@ -51,25 +54,7 @@ describe('gulp-bust-cache', function () {
 
     it('should both be cache busted', function (done) {
       const beforeFile = genFile('test/data/duplicate_element_before.html');
-
-      let newFileContent = null;
-
-      const stream = bustCache();
-
-      stream.on('data', function (newFile) {
-        newFileContent = newFile.contents;
-      });
-      stream.on('end', function () {
-        const diffText = diffHTMLs(String(expectedFile.contents), String(newFileContent));
-        done(diffText);
-      });
-      stream.on('error', function (err) {
-        should.exist(err);
-        done(err);
-      });
-
-      stream.write(beforeFile);
-      stream.end();
+      cachesShouldbeBusted(done, beforeFile, expectedFile);
     });
   });
 });
