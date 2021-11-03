@@ -31,11 +31,14 @@ const setAttibute = function (elm, newValue) {
   switch (contentName) {
   case "link":
     elm.attribs.href = newValue;
+    break;
   case "script":
   case "img":
     elm.attribs.src = newValue;
+    break;
   case "source":
     elm.attribs.srcset = newValue;
+    break;
   }
 };
 
