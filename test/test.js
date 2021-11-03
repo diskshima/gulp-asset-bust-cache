@@ -1,6 +1,8 @@
 const fs = require('fs');
 const should = require('should');
 const File = require('vinyl');
+const HtmlDiffer = require('html-differ').HtmlDiffer;
+const logger = require('html-differ/lib/logger');
 const { bustCache } = require('../index');
 
 describe('gulp-bust-cache', function () {
@@ -28,8 +30,18 @@ describe('gulp-bust-cache', function () {
         newFileContent = newFile.contents;
       });
       stream.on('end', function () {
-        String(newFileContent).should.equal(String(expectedFile.contents));
-        done();
+        const expected = String(expectedFile.contents);
+        const actual = String(newFileContent);
+        const htmlDiffer = new HtmlDiffer();
+        const isEqual = htmlDiffer.isEqual(expected, actual);
+
+        if (isEqual) {
+          done();
+        } else {
+          const diff = htmlDiffer.diffHtml(expected, actual);
+          const diffText = logger.getDiffText(diff, { charsAroundDiff: 40 });
+          done(diffText);
+        }
       });
       stream.on('error', function (err) {
         should.exist(err);
@@ -65,8 +77,18 @@ describe('gulp-bust-cache', function () {
         newFileContent = newFile.contents;
       });
       stream.on('end', function () {
-        String(newFileContent).should.equal(String(expectedFile.contents));
-        done();
+        const expected = String(expectedFile.contents);
+        const actual = String(newFileContent);
+        const htmlDiffer = new HtmlDiffer();
+        const isEqual = htmlDiffer.isEqual(expected, actual);
+
+        if (isEqual) {
+          done();
+        } else {
+          const diff = htmlDiffer.diffHtml(expected, actual);
+          const diffText = logger.getDiffText(diff, { charsAroundDiff: 40 });
+          done(diffText);
+        }
       });
       stream.on('error', function (err) {
         should.exist(err);
