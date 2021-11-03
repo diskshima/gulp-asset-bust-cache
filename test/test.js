@@ -5,6 +5,12 @@ const HtmlDiffer = require('html-differ').HtmlDiffer;
 const logger = require('html-differ/lib/logger');
 const { bustCache } = require('../index');
 
+function diffHTMLs(expected, actual) {
+  const htmlDiffer = new HtmlDiffer();
+  const diff = htmlDiffer.diffHtml(expected, actual);
+  return logger.getDiffText(diff, { charsAroundDiff: 40 });
+}
+
 describe('gulp-bust-cache', function () {
   describe('in buffer mode', function () {
     const expectedFile = new File({
@@ -30,18 +36,8 @@ describe('gulp-bust-cache', function () {
         newFileContent = newFile.contents;
       });
       stream.on('end', function () {
-        const expected = String(expectedFile.contents);
-        const actual = String(newFileContent);
-        const htmlDiffer = new HtmlDiffer();
-        const isEqual = htmlDiffer.isEqual(expected, actual);
-
-        if (isEqual) {
-          done();
-        } else {
-          const diff = htmlDiffer.diffHtml(expected, actual);
-          const diffText = logger.getDiffText(diff, { charsAroundDiff: 40 });
-          done(diffText);
-        }
+        const diffText = diffHTMLs(String(expectedFile.contents), String(newFileContent));
+        done(diffText);
       });
       stream.on('error', function (err) {
         should.exist(err);
@@ -77,18 +73,8 @@ describe('gulp-bust-cache', function () {
         newFileContent = newFile.contents;
       });
       stream.on('end', function () {
-        const expected = String(expectedFile.contents);
-        const actual = String(newFileContent);
-        const htmlDiffer = new HtmlDiffer();
-        const isEqual = htmlDiffer.isEqual(expected, actual);
-
-        if (isEqual) {
-          done();
-        } else {
-          const diff = htmlDiffer.diffHtml(expected, actual);
-          const diffText = logger.getDiffText(diff, { charsAroundDiff: 40 });
-          done(diffText);
-        }
+        const diffText = diffHTMLs(String(expectedFile.contents), String(newFileContent));
+        done(diffText);
       });
       stream.on('error', function (err) {
         should.exist(err);
