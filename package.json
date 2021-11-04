@@ -1,6 +1,6 @@
 {
-  "name": "gulp-bust-cache",
-  "homepage": "https://github.com/diskshima/gulp-bust-cache",
+  "name": "gulp-asset-bust-cache",
+  "homepage": "https://github.com/diskshima/gulp-asset-bust-cache",
   "author": "Daisuke Shimamoto <diskshima@gmail.com>",
   "version": "1.0.0",
   "packageManager": "yarn@3.1.0",

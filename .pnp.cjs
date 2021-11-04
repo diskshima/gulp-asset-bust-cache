@@ -19,14 +19,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     ],
     "dependencyTreeRoots": [
       {
-        "name": "gulp-bust-cache",
+        "name": "gulp-asset-bust-cache",
         "reference": "workspace:."
       }
     ],
     "enableTopLevelFallback": true,
     "ignorePatternData": "(^(?:\\.yarn\\/sdks(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$)",
     "fallbackExclusionList": [
-      ["gulp-bust-cache", ["workspace:."]]
+      ["gulp-asset-bust-cache", ["workspace:."]]
     ],
     "fallbackPool": [
     ],
@@ -2324,11 +2324,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["gulp-bust-cache", [
+      ["gulp-asset-bust-cache", [
         ["workspace:.", {
           "packageLocation": "./",
           "packageDependencies": [
-            ["gulp-bust-cache", "workspace:."],
+            ["gulp-asset-bust-cache", "workspace:."],
             ["cheerio", "npm:1.0.0-rc.10"],
             ["eslint", "npm:8.1.0"],
             ["gulp", "npm:4.0.2"],

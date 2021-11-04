@@ -2005,9 +2005,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gulp-bust-cache@workspace:.":
+"gulp-asset-bust-cache@workspace:.":
   version: 0.0.0-use.local
-  resolution: "gulp-bust-cache@workspace:."
+  resolution: "gulp-asset-bust-cache@workspace:."
   dependencies:
     cheerio: ^1.0.0-rc.10
     eslint: ^8.1.0

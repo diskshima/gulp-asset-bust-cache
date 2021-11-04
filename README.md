@@ -1,4 +1,4 @@
-# gulp-bust-cache
+# gulp-asset-bust-cache
 
 gulp plugin for busting the cache.
 
@@ -6,12 +6,12 @@ gulp plugin for busting the cache.
 
 1. Add to your development dependency.
     ```bash
-    npm install --save-dev gulp-cache-bust
+    npm install --save-dev gulp-asset-bust-cache
     ```
 1. To use it, add it to your pipeline.
     - Example:
     ```javascript
-    const bustCache = require('gulp-bust-cache');
+    const bustCache = require('gulp-asset-bust-cache');
 
     gulp.src('./dist/*/*.html')
         .pipe(bustCache())

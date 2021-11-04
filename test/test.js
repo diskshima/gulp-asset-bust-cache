@@ -39,7 +39,7 @@ function cachesShouldbeBusted(done, beforeFile, expectedFile) {
   stream.end();
 }
 
-describe('gulp-bust-cache', function () {
+describe('gulp-asset-bust-cache', function () {
   describe('in buffer mode', function () {
     const expectedFile = genFile('test/data/expected.html');
 
