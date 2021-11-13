@@ -48,11 +48,6 @@ const addMD5Param = function (origValue, options) {
   return valNoHash + "?v=" + hash;
 }
 
-const addMD5 = function (content, origValue, options) {
-  const newValue = addMD5Param(origValue, options);
-  return content.replace(origValue, newValue);
-};
-
 const bust = function(fileContents, options) {
   const dom = cheerio.load(fileContents);
 
