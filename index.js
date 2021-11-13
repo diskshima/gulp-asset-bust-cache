@@ -9,38 +9,13 @@ const MD5 = require("md5");
 
 const PLUGIN_NAME = "bust-cache";
 const DEFAULT_PARAM_NAME = 'v';
-
-const loadAttribute = function (content) {
-  const contentName = content.name.toLowerCase();
-
-  switch (contentName) {
-  case "link":
-    return content.attribs.href;
-  case "script":
-  case "img":
-    return content.attribs.src;
-  case "source":
-    return content.attribs.srcset;
-  }
-
-  throw "No matching attribute for this tag: " + contentName;
-};
-
-const setAttibute = function (elm, newValue) {
-  const contentName = elm.name.toLowerCase();
-
-  switch (contentName) {
-  case "link":
-    elm.attribs.href = newValue;
-    break;
-  case "script":
-  case "img":
-    elm.attribs.src = newValue;
-    break;
-  case "source":
-    elm.attribs.srcset = newValue;
-    break;
-  }
+const DEFAULT_SELECTOR_MAP = {
+    "script[src]": "src",
+    "link[rel=stylesheet][href]": "href",
+    "link[rel=import][href]": "href",
+    "link[rel=preload][href]": "href",
+    "source": "srcset",
+    "img": "src",
 };
 
 const addMD5Param = function (origValue, options) {
@@ -54,17 +29,23 @@ const addMD5Param = function (origValue, options) {
 const bust = function(fileContents, options) {
   const dom = cheerio.load(fileContents);
   const hasProtocol = /^(http(s)?)|\/\//;
-  const elements = dom("script[src], link[rel=stylesheet][href], link[rel=import][href], link[rel=preload][href], source, img");
 
-  for (var i = 0, len = elements.length; i < len; i++) {
-    const elm = elements[i];
-    const origValue = loadAttribute(elm);
+  const map = options.selectorMap || DEFAULT_SELECTOR_MAP;
 
-    if (!hasProtocol.test(origValue)) {
-      const newValue = addMD5Param(origValue, options);
-      setAttibute(elm, newValue);
-    }
-  }
+  Object.keys(map).forEach((key) => {
+      const elements = dom(key);
+      const attrName = map[key];
+
+      for (var j = 0; j < elements.length; j++) {
+        const elm = elements[j];
+        const origValue = elm.attribs[attrName];
+
+        if (!hasProtocol.test(origValue)) {
+          const newValue = addMD5Param(origValue, options);
+          elm.attribs[attrName] = newValue;
+        }
+      }
+  });
 
   return dom.html();
 };

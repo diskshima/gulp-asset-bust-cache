@@ -58,6 +58,13 @@ Specify the path to the directory where your assets reside. By default, the plug
 
 The query parameter name used for the hash.
 
+### options.selectorMap
+
+- Type: `Object`
+- Default: Please see `DEFAULT_SELECTOR_MAP` in [index.js](./index.js).
+
+This should be the selector to attribute name mapping. The key (selector) will be used to query for node and the value (attribute name) will be used as the attribute to add hashes.
+
 ### options.showLog
 
 - Type: `Boolean`
