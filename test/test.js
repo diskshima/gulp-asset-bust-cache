@@ -66,4 +66,18 @@ describe('gulp-asset-bust-cache', function () {
       cachesShouldbeBusted(done, beforeFile, expectedFile, { paramName: 'cb' });
     });
   });
+
+  describe('When selector:attribute is specified ', function () {
+    const expectedFile = genFile('test/data/attribute_mapping_expected.html');
+
+    it('should replace only the specified ones', function (done) {
+      const beforeFile = genFile('test/data/attribute_mapping_before.html');
+      cachesShouldbeBusted(done, beforeFile, expectedFile,
+                           {
+                               selectorMap: {
+                                   'script[src]': 'src',
+                               },
+                           });
+    });
+  });
 });
