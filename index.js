@@ -1,29 +1,29 @@
-const fs = require("fs");
-const path = require("path");
-const { Buffer } = require("buffer");
+const fs = require('fs');
+const path = require('path');
+const { Buffer } = require('buffer');
 
-const PluginError = require("plugin-error");
-const through = require("through2");
-const cheerio = require("cheerio");
-const MD5 = require("md5");
+const PluginError = require('plugin-error');
+const through = require('through2');
+const cheerio = require('cheerio');
+const MD5 = require('md5');
 
-const PLUGIN_NAME = "bust-cache";
+const PLUGIN_NAME = 'bust-cache';
 const DEFAULT_PARAM_NAME = 'v';
 const DEFAULT_SELECTOR_MAP = {
-    "script": "src",
-    "link[rel=stylesheet]": "href",
-    "link[rel=import]": "href",
-    "link[rel=preload]": "href",
-    "source": "srcset",
-    "img": "src",
+    'script': 'src',
+    'link[rel=stylesheet]': 'href',
+    'link[rel=import]': 'href',
+    'link[rel=preload]': 'href',
+    'source': 'srcset',
+    'img': 'src',
 };
 
 function addMD5Param(origValue, options) {
-  const valNoHash = origValue.split("?")[0];
+  const valNoHash = origValue.split('?')[0];
   const hash = MD5(fs.readFileSync(options.basePath + valNoHash).toString());
   const paramName = options.paramName || DEFAULT_PARAM_NAME;
 
-  return valNoHash + "?" + paramName + "=" + hash;
+  return valNoHash + '?' + paramName + '=' + hash;
 }
 
 function runBust(fileContents, options) {
@@ -63,11 +63,11 @@ function bustCache (options) {
 
     if (file.isBuffer()) {
       if (!options.basePath) {
-        options.basePath = path.dirname(path.resolve(file.path)) + "/";
+        options.basePath = path.dirname(path.resolve(file.path)) + '/';
       }
 
       if (options.showLog) {
-        console.log("Processing: ", file.path);
+        console.log('Processing: ', file.path);
       }
 
       const processedContents = runBust(file.contents.toString(enc), options);
