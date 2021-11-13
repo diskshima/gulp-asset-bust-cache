@@ -18,10 +18,10 @@ function genFile(fullpath) {
   });
 }
 
-function cachesShouldbeBusted(done, beforeFile, expectedFile) {
+function cachesShouldbeBusted(done, beforeFile, expectedFile, options) {
   let newFileContent = null;
 
-  const stream = bustCache();
+  const stream = bustCache(options);
 
   stream.on('data', function (newFile) {
     newFileContent = newFile.contents;
@@ -55,6 +55,15 @@ describe('gulp-asset-bust-cache', function () {
     it('should both be cache busted', function (done) {
       const beforeFile = genFile('test/data/duplicate_element_before.html');
       cachesShouldbeBusted(done, beforeFile, expectedFile);
+    });
+  });
+
+  describe('query name ', function () {
+    const expectedFile = genFile('test/data/query_name_expected.html');
+
+    it('should be respected', function (done) {
+      const beforeFile = genFile('test/data/query_name_before.html');
+      cachesShouldbeBusted(done, beforeFile, expectedFile, { paramName: 'cb' });
     });
   });
 });

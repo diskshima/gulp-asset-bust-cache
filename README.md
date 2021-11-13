@@ -29,7 +29,7 @@ After:
 ## Usage
 
 1. Add to your development dependency.
-    ```bash
+    ```sh
     npm install --save-dev gulp-asset-bust-cache
     ```
 1. To use it, add it to your pipeline.
@@ -44,19 +44,26 @@ After:
 
 ## Options
 
+### options.basePath
+
+- Type: `String`
+- Default: `''` (empty string)
+
+Specify the path to the directory where your assets reside. By default, the plugin will search the target assets files relative to your target HTML file.
+
+### options.paramName
+
+- Type: `String`
+- Default: `v`
+
+The query parameter name used for the hash.
+
 ### options.showLog
 
 - Type: `Boolean`
 - Default: `false`
 
 Show detailed logs.
-
-### options.basePath
-
-- Type: `String`
-- Default: `''`
-
-Specify the path to the directory where your assets reside. By default, the plugin will search the target assets files relative to your target HTML file.
 
 ## Development
 

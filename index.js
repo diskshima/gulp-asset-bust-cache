@@ -8,6 +8,7 @@ const cheerio = require("cheerio");
 const MD5 = require("md5");
 
 const PLUGIN_NAME = "bust-cache";
+const DEFAULT_PARAM_NAME = 'v';
 
 const loadAttribute = function (content) {
   const contentName = content.name.toLowerCase();
@@ -45,21 +46,13 @@ const setAttibute = function (elm, newValue) {
 const addMD5Param = function (origValue, options) {
   const valNoHash = origValue.split("?")[0];
   const hash = MD5(fs.readFileSync(options.basePath + valNoHash).toString());
-  return valNoHash + "?v=" + hash;
-}
+  const paramName = options.paramName || DEFAULT_PARAM_NAME;
 
-const addMD5 = function (content, origValue, options) {
-  const newValue = addMD5Param(origValue, options);
-  return content.replace(origValue, newValue);
-};
+  return valNoHash + "?" + paramName + "=" + hash;
+}
 
 const bust = function(fileContents, options) {
   const dom = cheerio.load(fileContents);
-
-  options = {
-    basePath : options.basePath || "",
-  };
-
   const hasProtocol = /^(http(s)?)|\/\//;
   const elements = dom("script[src], link[rel=stylesheet][href], link[rel=import][href], link[rel=preload][href], source, img");
 
