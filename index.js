@@ -18,7 +18,7 @@ const DEFAULT_SELECTOR_MAP = {
     "img": "src",
 };
 
-const addMD5Param = function (origValue, options) {
+function addMD5Param(origValue, options) {
   const valNoHash = origValue.split("?")[0];
   const hash = MD5(fs.readFileSync(options.basePath + valNoHash).toString());
   const paramName = options.paramName || DEFAULT_PARAM_NAME;
@@ -26,13 +26,13 @@ const addMD5Param = function (origValue, options) {
   return valNoHash + "?" + paramName + "=" + hash;
 }
 
-const bust = function(fileContents, options) {
+function runBust(fileContents, options) {
   const dom = cheerio.load(fileContents);
   const hasProtocol = /^(http(s)?)|\/\//;
 
   const map = options.selectorMap || DEFAULT_SELECTOR_MAP;
 
-  Object.keys(map).forEach((key) => {
+  Object.keys(map).forEach(function (key) {
       const elements = dom(key);
       const attrName = map[key];
 
@@ -48,9 +48,9 @@ const bust = function(fileContents, options) {
   });
 
   return dom.html();
-};
+}
 
-const bustCache = function (options) {
+function bustCache (options) {
   if (!options) {
     options = {};
   }
@@ -70,7 +70,7 @@ const bustCache = function (options) {
         console.log("Processing: ", file.path);
       }
 
-      const processedContents = bust(file.contents.toString(enc), options);
+      const processedContents = runBust(file.contents.toString(enc), options);
 
       file.contents = Buffer.from(processedContents);
     }
@@ -81,6 +81,6 @@ const bustCache = function (options) {
   });
 
   return stream;
-};
+}
 
 exports.bustCache = bustCache;
