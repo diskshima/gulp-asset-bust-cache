@@ -51,9 +51,21 @@ After:
 
 Show detailed logs.
 
-#### options.basePath
+### options.basePath
 
 - Type: `String`
 - Default: `''`
 
 Specify the path to the directory where your assets reside. By default, the plugin will search the target assets files relative to your target HTML file.
+
+## Development
+
+1. Use `nodenv` (or anything that respects `.node-version`) to install Node.
+    ```sh
+    nodenv install
+    ```
+1. Install `yarn`.
+    - No `yarn install` required as this project uses [Zero-Installs](https://yarnpkg.com/features/zero-installs).
+    ```sh
+    npm install -g yarn
+    ```
