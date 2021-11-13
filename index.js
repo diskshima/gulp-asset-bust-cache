@@ -10,10 +10,10 @@ const MD5 = require("md5");
 const PLUGIN_NAME = "bust-cache";
 const DEFAULT_PARAM_NAME = 'v';
 const DEFAULT_SELECTOR_MAP = {
-    "script[src]": "src",
-    "link[rel=stylesheet][href]": "href",
-    "link[rel=import][href]": "href",
-    "link[rel=preload][href]": "href",
+    "script": "src",
+    "link[rel=stylesheet]": "href",
+    "link[rel=import]": "href",
+    "link[rel=preload]": "href",
     "source": "srcset",
     "img": "src",
 };
