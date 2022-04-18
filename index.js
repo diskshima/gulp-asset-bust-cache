@@ -48,7 +48,7 @@ function runBust(file, enc, options) {
       const elm = elements[j];
       const origValue = elm.attribs[attrName];
 
-      if (!hasProtocol.test(origValue)) {
+      if (origValue && !hasProtocol.test(origValue)) {
         const newValue = addMD5Param(origValue, tmpOptions);
         elm.attribs[attrName] = newValue;
       }
