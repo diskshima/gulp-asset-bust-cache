@@ -18,10 +18,8 @@ function genFile(fullpath) {
   });
 }
 
-function cachesShouldbeBusted(done, beforeFile, expectedFile, options) {
+function cachesShouldbeBusted(done, stream, beforeFile, expectedFile) {
   let newFileContent = null;
-
-  const stream = bustCache(options);
 
   stream.on('data', function (newFile) {
     newFileContent = newFile.contents;
@@ -36,7 +34,6 @@ function cachesShouldbeBusted(done, beforeFile, expectedFile, options) {
   });
 
   stream.write(beforeFile);
-  stream.end();
 }
 
 describe('gulp-asset-bust-cache', function () {
@@ -44,8 +41,12 @@ describe('gulp-asset-bust-cache', function () {
     const expectedFile = genFile('test/data/expected.html');
 
     it('should add hashes to assets', function (done) {
+      const stream = bustCache();
+
       const beforeFile = genFile('test/data/before.html');
-      cachesShouldbeBusted(done, beforeFile, expectedFile);
+      cachesShouldbeBusted(done, stream, beforeFile, expectedFile);
+
+      stream.end();
     });
   });
 
@@ -53,8 +54,12 @@ describe('gulp-asset-bust-cache', function () {
     const expectedFile = genFile('test/data/duplicate_element_expected.html');
 
     it('should both be cache busted', function (done) {
+      const stream = bustCache();
+
       const beforeFile = genFile('test/data/duplicate_element_before.html');
-      cachesShouldbeBusted(done, beforeFile, expectedFile);
+      cachesShouldbeBusted(done, stream, beforeFile, expectedFile);
+
+      stream.end();
     });
   });
 
@@ -62,8 +67,12 @@ describe('gulp-asset-bust-cache', function () {
     const expectedFile = genFile('test/data/query_name_expected.html');
 
     it('should be respected', function (done) {
+      const stream = bustCache({ paramName: 'cb' });
+
       const beforeFile = genFile('test/data/query_name_before.html');
-      cachesShouldbeBusted(done, beforeFile, expectedFile, { paramName: 'cb' });
+      cachesShouldbeBusted(done, stream, beforeFile, expectedFile);
+
+      stream.end();
     });
   });
 
@@ -71,13 +80,32 @@ describe('gulp-asset-bust-cache', function () {
     const expectedFile = genFile('test/data/attribute_mapping_expected.html');
 
     it('should replace only the specified ones', function (done) {
+      const stream = bustCache({
+        selectorMap: {
+          'script[src]': 'src'
+        }
+      });
+
       const beforeFile = genFile('test/data/attribute_mapping_before.html');
-      cachesShouldbeBusted(done, beforeFile, expectedFile,
-                           {
-                               selectorMap: {
-                                   'script[src]': 'src',
-                               },
-                           });
+      cachesShouldbeBusted(done, stream, beforeFile, expectedFile);
+
+      stream.end();
+    });
+  });
+
+  describe('HTML files with different directories ', function () {
+    it('should be properly cache busted', function (done) {
+      const stream = bustCache();
+
+      const expectedFile = genFile('test/data/expected.html');
+      const beforeFile = genFile('test/data/before.html');
+      stream.write(beforeFile);
+
+      const expectedSubdirFile = genFile('test/data/subdir/expected.html');
+      const beforeSubDirFile = genFile('test/data/subdir/before.html');
+      cachesShouldbeBusted(done, stream, beforeSubDirFile, expectedSubdirFile);
+
+      stream.end();
     });
   });
 });
