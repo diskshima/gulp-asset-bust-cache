@@ -48,6 +48,17 @@ describe('gulp-asset-bust-cache', function () {
 
       stream.end();
     });
+
+    it('should ignore when missing attributes', function (done) {
+      const stream = bustCache();
+
+      const expectedFile = genFile('test/data/missing_attribute_expected.html');
+
+      const beforeFile = genFile('test/data/missing_attribute_before.html');
+      cachesShouldbeBusted(done, stream, beforeFile, expectedFile);
+
+      stream.end();
+    });
   });
 
   describe('duplicate elements ', function () {
@@ -77,8 +88,6 @@ describe('gulp-asset-bust-cache', function () {
   });
 
   describe('When selector:attribute is specified ', function () {
-    const expectedFile = genFile('test/data/attribute_mapping_expected.html');
-
     it('should replace only the specified ones', function (done) {
       const stream = bustCache({
         selectorMap: {
@@ -86,6 +95,7 @@ describe('gulp-asset-bust-cache', function () {
         }
       });
 
+      const expectedFile = genFile('test/data/attribute_mapping_expected.html');
       const beforeFile = genFile('test/data/attribute_mapping_before.html');
       cachesShouldbeBusted(done, stream, beforeFile, expectedFile);
 
