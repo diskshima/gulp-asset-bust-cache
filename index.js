@@ -41,18 +41,18 @@ function runBust(file, enc, options) {
   const map = tmpOptions.selectorMap || DEFAULT_SELECTOR_MAP;
 
   Object.keys(map).forEach(function (key) {
-      const elements = dom(key);
-      const attrName = map[key];
+    const elements = dom(key);
+    const attrName = map[key];
 
-      for (var j = 0; j < elements.length; j++) {
-        const elm = elements[j];
-        const origValue = elm.attribs[attrName];
+    for (var j = 0; j < elements.length; j++) {
+      const elm = elements[j];
+      const origValue = elm.attribs[attrName];
 
-        if (!hasProtocol.test(origValue)) {
-          const newValue = addMD5Param(origValue, tmpOptions);
-          elm.attribs[attrName] = newValue;
-        }
+      if (!hasProtocol.test(origValue)) {
+        const newValue = addMD5Param(origValue, tmpOptions);
+        elm.attribs[attrName] = newValue;
       }
+    }
   });
 
   return dom.html();
