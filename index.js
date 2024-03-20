@@ -58,7 +58,7 @@ function runBust(file, enc, options) {
   return dom.html();
 }
 
-function bustCache (options) {
+function bustCache(options) {
   if (!options) {
     options = {};
   }
