@@ -107,7 +107,8 @@ describe('gulp-asset-bust-cache', function () {
     it('should be properly cache busted', function (done) {
       const stream = bustCache();
 
-      const expectedFile = genFile('test/data/expected.html');
+      // Not checking the result of this first file as we only want to check
+      // the cache busting for the second file.
       const beforeFile = genFile('test/data/before.html');
       stream.write(beforeFile);
 
